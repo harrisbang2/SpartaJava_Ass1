@@ -10,38 +10,28 @@ public class MainSystem {
     public void Start() {
         menuView = new OrderView();
         OrderController = new OrderManagement();
-        displayMainMenu();
+        MainMenu();
     }
 
-    /**
-     * 메인메뉴 출력
-     */
-    private static void displayMainMenu() {
+    //// 메인 메뉴 출력
+    private static void MainMenu() {
         System.out.println("SHAKESHACK BURGER 에 오신걸 환영합니다.");
-        List<Product> mainMenus = menuView.getMenus("Main");	// 메뉴 컨텍스트에서 메인메뉴 조회
-        int nextNum = printMenu(mainMenus, 1);					// 메인메뉴 출력
+        List<Product> mainMenus = menuView.getMenus("Main");
+        int nextNum = printMenu(mainMenus, 1);
 
         System.out.println("[ ORDER MENU ]");
-        List<Product> orderMenus = menuView.getMenus("Order");	// 메뉴 컨텍스트에서 주문메뉴 조회
-        printMenu(orderMenus, nextNum);								// 주문메뉴 출력
-
-        handleMainMenuInput(); // 메인메뉴 입력처리
+        List<Product> orderMenus = menuView.getMenus("Order");
+        printMenu(orderMenus, nextNum);
+        // 메인메뉴 입력처리
+        handleMainMenuInput();
     }
-    /**
-     * 메뉴 목록 출력
-     * @param menus : 출력할 메뉴 리스트
-     * @param num : 출력중인 전체 순번
-     * @return 출력 후 전체 순번
-     */
     private static int printMenu(List<Product> menus, int num) {
-        for (int i=0; i<menus.size(); i++, num++) {		// menus 목록에 있는 메뉴 출력 (전체 순번값인 num 값도 ++)
+        for (int i=0; i<menus.size(); i++, num++) {
             System.out.println(num + ". " + menus.get(i).name + "   | " + menus.get(i).description); // ex. 0.메뉴이름 | 메뉴설명
         }
         return num;
     }
-    /**
-     * 메인메뉴 입력처리
-     */
+
     private static void handleMainMenuInput() {
         Scanner scanner = new Scanner(System.in);
         int input = scanner.nextInt();
@@ -101,7 +91,7 @@ public class MainSystem {
         Scanner scanner = new Scanner(System.in);
         int input = scanner.nextInt();
         if (input == 0) {
-            displayMainMenu();
+            MainMenu();
         } else if (input >= 1 && input <= 4) {
             switch (input) {
                 case 1:
@@ -153,12 +143,16 @@ public class MainSystem {
     private static void handleMenuItemInput(List<Items> items) {
         Scanner scanner = new Scanner(System.in);
         int input = scanner.nextInt();
-        if (input >= 1 && input <= items.size()) { 	// 입력값 유효성 검증
-            Items selectedItem = items.get(input-1);	// 선택한 상품메뉴 조회
-            displayConfirmation(selectedItem);		// 선택한 상품메뉴 확인 문구 출력
+        // 입력값 유효성 검증
+        if (input >= 1 && input <= items.size()) {
+            // 선택한 상품메뉴 조회
+            Items selectedItem = items.get(input-1);
+            // 선택한 상품메뉴 확인 문구 출력
+            displayConfirmation(selectedItem);
         } else {
+            // 상품메뉴 입력 처리 재수행
             System.out.println("잘못된 입력입니다. 다시 입력해주세요.");
-            handleMenuItemInput(items);	// 상품메뉴 입력 처리 재수행
+            handleMenuItemInput(items);
         }
     }
 
@@ -191,9 +185,9 @@ public class MainSystem {
         if (input == 1) {								// 1. 확인 입력시
             menuView.addToCart(menuItem);			// 선택한 상품을 컨텍스트의 장바구니에 추가
             System.out.println("장바구니에 추가되었습니다.");
-            displayMainMenu();							// 메인메뉴 출력하며 처음으로 돌아가기
+            MainMenu();							// 메인메뉴 출력하며 처음으로 돌아가기
         } else if (input == 2) {						// 2. 취소 입력시
-            displayMainMenu();							// 바로 메인메뉴 출력하며 처음으로 돌아가기
+            MainMenu();							// 바로 메인메뉴 출력하며 처음으로 돌아가기
         } else {
             System.out.println("잘못된 입력입니다. 다시 입력해주세요.");
             handleConfirmationInput(menuItem);			// 잘못된 입력시 다시 확인여부 입력 처리 재수행
@@ -211,16 +205,13 @@ public class MainSystem {
         System.out.println("1. 주문      2. 메뉴판");
         handleOrderMenuInput();				// 주문진행 입력 처리
     }
-    /**
-     * 주문메뉴1. 주문진행 입력w 처리
-     */
     private static void handleOrderMenuInput() {
         Scanner scanner = new Scanner(System.in);
         int input = scanner.nextInt();
         if (input == 1) {
             displayOrderComplete();	// 1. 주문 입력시 주문완료 처리
         } else if (input == 2) {
-            displayMainMenu();		// 2. 메뉴판 입력시 메인메뉴 출력하며 돌아가기
+            MainMenu();		// 2. 메뉴판 입력시 메인메뉴 출력하며 돌아가기
         } else {
             System.out.println("잘못된 입력입니다. 다시 입력해주세요.");
             handleOrderMenuInput();	// 잘못된 입력시 주문진행 입력처리 재수행
@@ -241,23 +232,23 @@ public class MainSystem {
         System.out.println("대기번호는 [ " + orderNumber + " ] 번 입니다.");
         resetCartAndDisplayMainMenu();		// 장바구니 초기화 후 메인메뉴 출력
     }
-    /**
-     * 장바구니 초기화 후 메인메뉴 출력
-     */
+
+    //장바구니 초기화 && 메인메뉴 출력
     private static void resetCartAndDisplayMainMenu() {
-        menuView.resetCart();		// 컨텍스트에서 장바구니 초기화
+        // 컨텍스트에서 장바구니 초기화
+        menuView.resetCart();
         System.out.println("(3초후 메뉴판으로 돌아갑니다.)");
+        // 3초 대기
         try {
-            Thread.sleep(3000); // 3초 대기
+            Thread.sleep(3000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        displayMainMenu();		// 메인메뉴 출력하며 돌아가기
+        // 메인메뉴 출력
+        MainMenu();
     }
 
-    /**
-     * 주문메뉴2. 주문취소 메뉴 출력
-     */
+    // 주문 취소
     private static void handleCancelMenuInput() {
         System.out.println("주문을 취소하시겠습니까?");
         System.out.println("1. 확인        2. 취소");
@@ -268,24 +259,25 @@ public class MainSystem {
     private static void handleListMenuInput() {
         OrderController.displayWaitingOrders();
         OrderController.displayCompletedOrders();
-        displayMainMenu();
+        MainMenu();
     }
 
-    /**
-     * 주문메뉴2. 주문취소 확인 입력값 처리
-     */
     private static void handleCancelConfirmationInput() {
         Scanner scanner = new Scanner(System.in);
         int input = scanner.nextInt();
         if (input == 1) {
-            menuView.resetCart();	// 장바구니 초기화
+            menuView.resetCart();
+            // 장바구니 초기화
             System.out.println("주문이 취소되었습니다.");
-            displayMainMenu();			// 메인메뉴 출력하며 돌아가기
+            // 메인메뉴 출력하며 돌아가기
+            MainMenu();
         } else if (input == 2) {
-            displayMainMenu();			// 메인메뉴 출력하며 돌아가기
+            // 메인메뉴 출력하며 돌아가기
+            MainMenu();
         } else {
+            // 주문취소 확인 입력값 처리 재수행
             System.out.println("잘못된 입력입니다. 다시 입력해주세요.");
-            handleCancelConfirmationInput();	// 주문취소 확인 입력값 처리 재수행
+            handleCancelConfirmationInput();
         }
     }
 }
